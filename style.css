@@ -1,11 +1,7 @@
-body{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
-
 #item{
+    position: fixed;
+    top:200px;
+    left: 200px;
     box-sizing: border-box;
     background-color: cyan;
     width: 300px;
@@ -21,8 +17,8 @@ body{
     position: fixed;
     border: 1px solid black;
     display: grid;
-    grid-template-rows: 100px 300px 100px;
-    grid-template-columns: 100px 300px 100px;
+    /* grid-template-rows: 100px 300px 100px;
+    grid-template-columns: 100px 300px 100px; */
 }
 
 .my-part{

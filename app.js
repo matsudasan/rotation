@@ -16,9 +16,13 @@ item.onclick=(e)=>{
         x:size.left+size.width/2,
         y:size.top+size.height/2
     }
-
-    grid.style.top=`${firstPosition.top-100}px` //-100はgridの1列目のheight
-    grid.style.left=`${firstPosition.left-100}px` //-100はgridの1行目のwidth
+    const itemStyle=window.getComputedStyle(item)
+    const top=itemStyle.getPropertyValue('top').match(/[0-9]*/)[0];
+    const left=itemStyle.getPropertyValue('left').match(/[0-9]*/)[0];
+    grid.style.top=`${top-100}px` //-100はgridの1列目のheight
+    grid.style.left=`${left-100}px` //-100はgridの1行目のwidth
+    grid.style.gridTemplateRows=`100px ${firstPosition.width}px 100px`
+    grid.style.gridTemplateColumns=`100px ${firstPosition.height}px 100px`
 }
 
 partsArray.forEach(parts=>{
