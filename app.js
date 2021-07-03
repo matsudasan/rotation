@@ -27,7 +27,7 @@ item.onclick=(e)=>{
 
 partsArray.forEach(parts=>{
     parts.addEventListener('mousedown',(e)=>{
-        firstDegree = Math.atan2(e.pageX - itemCenter.x, - (e.pageY - itemCenter.y) )*(180/Math.PI); 
+        firstDegree = Math.atan2(e.pageX - itemCenter.x, - (e.pageY - itemCenter.y) )*(180/Math.PI); //クリック時の角度を取得
         document.addEventListener('mousemove',mouseMove)
         document.addEventListener('mouseup',mouseUp)
     })
@@ -38,12 +38,12 @@ partsArray.forEach(parts=>{
 
 const mouseUp=()=>{
     document.removeEventListener('mousemove',mouseMove)
-    nowDegree+=(degree-firstDegree)
+    nowDegree+=(degree-firstDegree)　//現在の角度を更新
+    //今の方法だとクリック時に角度がいくらか付いているので、firstDegree分引かなければならない
     document.removeEventListener('mouseup',mouseUp)
 }
 
 const mouseMove=(e)=>{
-    const size=e.target.getBoundingClientRect()
     degree = Math.atan2(e.pageX - itemCenter.x, - (e.pageY - itemCenter.y) )*(180/Math.PI); 
     item.style.transform=`rotate(${nowDegree+(degree-firstDegree)}deg)`
     grid.style.transform=`rotate(${nowDegree+(degree-firstDegree)}deg)`
