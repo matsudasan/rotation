@@ -26,13 +26,3 @@
 .none{
     display: none !important;
 }
-
-.cicle{
-    top: 10px;
-    left: 10px;
-    position: absolute;
-    background-color: black;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-}

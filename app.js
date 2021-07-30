@@ -78,8 +78,12 @@ const setPartsStyle = (rect, rotaion) => {
         y: rect.top + rect.height / 2
     }
     const part1Position = linearTransformation({ x: rect.left - 50, y: rect.top - 50 }, rotaion, center) 
-    parts1.style.top = `${part1Position.y - 50}px`
-    parts1.style.left = `${part1Position.x - 50}px`
+    /*
+    xの-50は回転エリアの横幅/2
+    yは縦
+     */
+    parts1.style.top = `${part1Position.y - 50}px`　//線形変形は中心座標で計算したため、縦幅/2を引く
+    parts1.style.left = `${part1Position.x - 50}px` //上に同じく
     parts1.style.transform = `rotate(${rotaion}deg)`
 
     const part2Position = linearTransformation({ x: rect.right + 50, y: rect.top - 50 }, rotaion, center)
@@ -101,7 +105,9 @@ const setPartsStyle = (rect, rotaion) => {
 document.onclick = (e) => {
     if (e.target.closest('#item')) {
         item.classList.add('border')
+        partsArray.forEach(part=>part.classList.remove('none'))
     } else {
         item.classList.remove('border')
+        partsArray.forEach(part=>part.classList.add('none'))
     }
 }
