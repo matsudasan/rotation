@@ -1,11 +1,11 @@
 #item{
     position: fixed;
     top:200px;
-    left: 200px;
+    left: 300px;
     box-sizing: border-box;
     background-color: cyan;
     width: 300px;
-    height: 300px;
+    height: 200px;
     z-index: 10;
 }
 
@@ -13,13 +13,6 @@
     border: 1px solid black;
 }
 
-#grid{
-    position: fixed;
-    border: 1px solid black;
-    display: grid;
-    /* grid-template-rows: 100px 300px 100px;
-    grid-template-columns: 100px 300px 100px; */
-}
 
 .my-part{
 	width: 100px;
@@ -27,28 +20,19 @@
     background: #cddc39;
     user-select: none;
     cursor: pointer;
-}
-
-#my-parts1{
-    grid-row: 0/1;
-    grid-column: 0/1;
-}
-
-#my-parts2{
-    grid-row:1/2;
-    grid-column: 3/4;
-}
-
-#my-parts3{
-    grid-row:3/4;
-    grid-column: 0/1;
-}
-
-#my-parts4{
-    grid-row:3/4;
-    grid-column: 3/4;
+    position: absolute;
 }
 
 .none{
     display: none !important;
+}
+
+.cicle{
+    top: 10px;
+    left: 10px;
+    position: absolute;
+    background-color: black;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
 }
