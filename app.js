@@ -77,7 +77,7 @@ const setPartsStyle = (rect, rotaion) => {
         x: rect.left + rect.width / 2,
         y: rect.top + rect.height / 2
     }
-    const part1Position = linearTransformation({ x: rect.left - 50, y: rect.top - 50 }, rotaion, center) 
+    const part1Position = linearTransformation({ x: rect.left - 50, y: rect.top - 50 }, rotaion, center)
     /*
     xの-50は回転エリアの横幅/2
     yは縦
@@ -86,28 +86,29 @@ const setPartsStyle = (rect, rotaion) => {
     parts1.style.left = `${part1Position.x - 50}px` //上に同じく
     parts1.style.transform = `rotate(${rotaion}deg)`
 
-    const part2Position = linearTransformation({ x: rect.right + 50, y: rect.top - 50 }, rotaion, center)
+    const margin = 10
+    const part2Position = linearTransformation({ x: rect.right + 50 + margin, y: rect.top - 50 - margin }, rotaion, center) //marginを付けた場合
     parts2.style.top = `${part2Position.y - 50}px`
     parts2.style.left = `${part2Position.x - 50}px`
     parts2.style.transform = `rotate(${rotaion}deg)`
 
     const part3Position = linearTransformation({ x: rect.left - 50, y: rect.bottom + 50 }, rotaion, center)
-    parts3.style.top = `${part3Position.y-50}px`
-    parts3.style.left = `${part3Position.x-50}px`
+    parts3.style.top = `${part3Position.y - 50}px`
+    parts3.style.left = `${part3Position.x - 50}px`
     parts3.style.transform = `rotate(${rotaion}deg)`
 
     const part4Position = linearTransformation({ x: rect.right + 50, y: rect.bottom + 50 }, rotaion, center)
-    parts4.style.top = `${part4Position.y-50}px`
-    parts4.style.left = `${part4Position.x-50}px`
+    parts4.style.top = `${part4Position.y - 50}px`
+    parts4.style.left = `${part4Position.x - 50}px`
     parts4.style.transform = `rotate(${rotaion}deg)`
 }
 
 document.onclick = (e) => {
     if (e.target.closest('#item')) {
         item.classList.add('border')
-        partsArray.forEach(part=>part.classList.remove('none'))
+        partsArray.forEach(part => part.classList.remove('none'))
     } else {
         item.classList.remove('border')
-        partsArray.forEach(part=>part.classList.add('none'))
+        partsArray.forEach(part => part.classList.add('none'))
     }
 }
