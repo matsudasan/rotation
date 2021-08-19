@@ -1,5 +1,5 @@
 (() => {
-    const item = document.getElementById('item')
+    const items = document.querySelectorAll('.item')
     const clickItemPosition = { x: 0, y: 0 }
     const mouseDown = (e) => {
         clickItemPosition.x = e.pageX - e.target.offsetLeft;
@@ -9,13 +9,13 @@
     }
 
     const mouseMove = (e) => {
-        item.style.top = e.pageY - clickItemPosition.y + "px";
-        item.style.left = e.pageX - clickItemPosition.x + "px";
+        e.target.style.top = e.pageY - clickItemPosition.y + "px";
+        e.target.style.left = e.pageX - clickItemPosition.x + "px";
     }
 
-    const mouseUp=(e)=>{
+    const mouseUp = (e) => {
         document.removeEventListener('mousemove', mouseMove)
     }
 
-    item.addEventListener('mousedown', mouseDown)
+    items.forEach(item => item.addEventListener('mousedown', mouseDown))
 })()

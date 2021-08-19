@@ -1,35 +1,41 @@
 (() => {
-    const item = document.getElementById('item')
+    const items = document.querySelectorAll('.item')
     const upperLeft = document.getElementById('rotation-upperLeft') //左上
     const upperRight = document.getElementById('rotation-upperRight') //右上
     const lowerLeft = document.getElementById('rotation-lowerLeft') //左下
     const lowerRight = document.getElementById('rotation-lowerRight') //右下
-    const partsArray = [upperLeft, upperRight, lowerLeft, lowerRight]
+    const partss = [upperLeft, upperRight, lowerLeft, lowerRight]
     let firstDegree //クリック時の角度
     let itemCenter = {}　//アイテムの中心座標
     let nowDegree = 0　//現在の角度
     let degree　//現在動かしている角度
-    const firstPosition = item.getBoundingClientRect() //itemの最初の座標
+    let firstPosition  //itemの最初の座標
+    let clickedItem
     const rotationSize = {
         width: parseFloat(window.getComputedStyle(upperLeft).getPropertyValue("width")),
         height: parseFloat(window.getComputedStyle(upperLeft).getPropertyValue("height")),
     }
-    item.onclick = (e) => {
-        const size = e.target.getBoundingClientRect()
-        itemCenter = {
-            x: size.left + size.width / 2,
-            y: size.top + size.height / 2
+    items.forEach(item => {
+        item.onclick = (e) => {
+            clickedItem = e.target
+            nowDegree = e.target.style.transform ? parseFloat(e.target.style.transform.match(/-?[0-9]+\.?[0-9]*/g)[0]) : 0
+            firstPosition = e.target.getBoundingClientRect()
+            const size = e.target.getBoundingClientRect()
+            itemCenter = {
+                x: size.left + size.width / 2,
+                y: size.top + size.height / 2
+            }
+            setPartsStyle(getItemRect(item), nowDegree)
         }
-        setPartsStyle(getItemRect(item), nowDegree)
-    }
+    })
 
-    partsArray.forEach(parts => {
-        parts.addEventListener('mousedown', (e) => {
+    partss.forEach(part => {
+        part.addEventListener('mousedown', (e) => {
             firstDegree = Math.atan2(e.pageX - itemCenter.x, - (e.pageY - itemCenter.y)) * (180 / Math.PI); //クリック時の角度を取得
             document.addEventListener('mousemove', mouseMove)
             document.addEventListener('mouseup', mouseUp)
         })
-        parts.addEventListener('mouseup', () => {
+        part.addEventListener('mouseup', () => {
             document.removeEventListener('mousemove', mouseMove)
         })
     })
@@ -45,9 +51,8 @@
         degree = Math.atan2(e.pageX - itemCenter.x, - (e.pageY - itemCenter.y)) * (180 / Math.PI);
         let rotaion = nowDegree + (degree - firstDegree)
         if (rotaion < 0) rotaion += 360;
-        item.style.transform = `rotate(${rotaion % 360}deg)`
-
-        setPartsStyle(getItemRect(item), rotaion % 360)
+        clickedItem.style.transform = `rotate(${rotaion % 360}deg)`
+        setPartsStyle(getItemRect(clickedItem), rotaion % 360)
 
     }
 
@@ -91,7 +96,7 @@
         upperLeft.style.left = `${upperLeftPosition.x - rotationSize.width / 2}px` //上に同じく 横幅/2
         upperLeft.style.transform = `rotate(${rotaion}deg)`
 
-        const margin = 10
+        const margin = 5
         const upperRightPosition = linearTransformation({ x: rect.right + rotationSize.width / 2 + margin, y: rect.top - rotationSize.height / 2 - margin }, rotaion, center) //marginを付けた場合
         upperRight.style.top = `${upperRightPosition.y - rotationSize.height / 2}px`
         upperRight.style.left = `${upperRightPosition.x - rotationSize.width / 2}px`
@@ -109,10 +114,10 @@
     }
 
     document.onclick = (e) => {
-        if (e.target.closest('#item')) {
-            partsArray.forEach(part => part.classList.remove('none'))
+        if (e.target.closest('.item')) {
+            partss.forEach(part => part.classList.remove('none'))
         } else {
-            partsArray.forEach(part => part.classList.add('none'))
+            partss.forEach(part => part.classList.add('none'))
         }
     }
 })()

@@ -1,18 +1,35 @@
-#item{
+.item{
     position: fixed;
+    user-select: none;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.red{
     top:200px;
     left: 300px;
-    box-sizing: border-box;
-    background-color: cyan;
+    background-color: red;
     width: 300px;
     height: 200px;
-    z-index: 10;
-    cursor: pointer;
+}
+.blue{
+    top:100px;
+    left: 150px;
+    background-color: blue;
+    width: 100px;
+    height: 200px;
+}
+.green{
+    top:100px;
+    left: 150px;
+    background-color: green;
+    width: 250px;
+    height: 100px;
 }
 
 .rotation{
-	width: 100px;
-	height: 100px;
+	width: 20px;
+	height: 20px;
     background: #cddc39;
     user-select: none;
     cursor: pointer;
