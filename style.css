@@ -39,3 +39,16 @@
 .none{
     display: none !important;
 }
+
+.resize{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    border-radius: 50%; 
+    border: 1px solid #5BC2DC;
+    user-select: none;
+    background-color: white;
+    z-index: 2;
+    box-sizing: border-box;
+}

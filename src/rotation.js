@@ -4,7 +4,7 @@
     const upperRight = document.getElementById('rotation-upperRight') //右上
     const lowerLeft = document.getElementById('rotation-lowerLeft') //左下
     const lowerRight = document.getElementById('rotation-lowerRight') //右下
-    const partss = [upperLeft, upperRight, lowerLeft, lowerRight]
+    const parts = [upperLeft, upperRight, lowerLeft, lowerRight]
     let firstDegree //クリック時の角度
     let itemCenter = {}　//アイテムの中心座標
     let nowDegree = 0　//現在の角度
@@ -15,21 +15,20 @@
         width: parseFloat(window.getComputedStyle(upperLeft).getPropertyValue("width")),
         height: parseFloat(window.getComputedStyle(upperLeft).getPropertyValue("height")),
     }
-    items.forEach(item => {
-        item.onclick = (e) => {
-            clickedItem = e.target
-            nowDegree = e.target.style.transform ? parseFloat(e.target.style.transform.match(/-?[0-9]+\.?[0-9]*/g)[0]) : 0
-            firstPosition = e.target.getBoundingClientRect()
-            const size = e.target.getBoundingClientRect()
-            itemCenter = {
-                x: size.left + size.width / 2,
-                y: size.top + size.height / 2
-            }
-            setPartsStyle(getItemRect(item), nowDegree)
+    const clickItem = (e) => {
+        clickedItem = e.target
+        nowDegree = e.target.style.transform ? parseFloat(e.target.style.transform.match(/-?[0-9]+\.?[0-9]*/g)[0]) : 0
+        firstPosition = e.target.getBoundingClientRect()
+        const size = e.target.getBoundingClientRect()
+        itemCenter = {
+            x: size.left + size.width / 2,
+            y: size.top + size.height / 2
         }
-    })
+        setPartsStyle(getItemRect(e.target), nowDegree)
+    }
+    items.forEach(item => item.addEventListener('click', clickItem))
 
-    partss.forEach(part => {
+    parts.forEach(part => {
         part.addEventListener('mousedown', (e) => {
             firstDegree = Math.atan2(e.pageX - itemCenter.x, - (e.pageY - itemCenter.y)) * (180 / Math.PI); //クリック時の角度を取得
             document.addEventListener('mousemove', mouseMove)
@@ -56,38 +55,13 @@
 
     }
 
-    const getItemRect = (item) => {
-        const itemStyle = window.getComputedStyle(item)
-        const width = parseFloat(itemStyle.getPropertyValue("width"))
-        const height = parseFloat(itemStyle.getPropertyValue("height"))
-
-        const top = parseFloat(itemStyle.getPropertyValue('top').match(/[0-9]*/)[0])
-        const left = parseFloat(itemStyle.getPropertyValue('left').match(/[0-9]*/)[0])
-        const right = left + width
-        const bottom = top + height
-
-        return { left, right, top, bottom, width, height }
-    }
-
-    const linearTransformation = (target, degree, basicPoint) => {
-        const radian = degree * (Math.PI / 180)
-        const firstTransformation = {
-            x: (target.x - basicPoint.x) * Math.cos(radian) + (target.y - basicPoint.y) * -Math.sin(radian),
-            y: (target.x - basicPoint.x) * Math.sin(radian) + (target.y - basicPoint.y) * Math.cos(radian),
-        }
-        return {
-            x: firstTransformation.x + basicPoint.x,
-            y: firstTransformation.y + basicPoint.y
-        }
-    }
-
-
     const setPartsStyle = (rect, rotaion) => {
         const center = {
             x: rect.left + rect.width / 2,
             y: rect.top + rect.height / 2
         }
-        const upperLeftPosition = linearTransformation({ x: rect.left - rotationSize.width / 2, y: rect.top - rotationSize.height / 2 }, rotaion, center)
+        const margin = 7
+        const upperLeftPosition = linearTransformation({ x: rect.left - rotationSize.width / 2 - margin, y: rect.top - rotationSize.height / 2 - margin }, rotaion, center)
         /*
         xの-50は回転エリアの横幅/2
         yは縦
@@ -96,28 +70,29 @@
         upperLeft.style.left = `${upperLeftPosition.x - rotationSize.width / 2}px` //上に同じく 横幅/2
         upperLeft.style.transform = `rotate(${rotaion}deg)`
 
-        const margin = 5
-        const upperRightPosition = linearTransformation({ x: rect.right + rotationSize.width / 2 + margin, y: rect.top - rotationSize.height / 2 - margin }, rotaion, center) //marginを付けた場合
+        const upperRightPosition = linearTransformation({ x: rect.right + rotationSize.width / 2 + margin, y: rect.top - rotationSize.height / 2 - margin }, rotaion, center)
         upperRight.style.top = `${upperRightPosition.y - rotationSize.height / 2}px`
         upperRight.style.left = `${upperRightPosition.x - rotationSize.width / 2}px`
         upperRight.style.transform = `rotate(${rotaion}deg)`
 
-        const lowerLeftPosition = linearTransformation({ x: rect.left - rotationSize.width / 2, y: rect.bottom + rotationSize.height / 2 }, rotaion, center)
+        const lowerLeftPosition = linearTransformation({ x: rect.left - rotationSize.width / 2 - margin, y: rect.bottom + rotationSize.height / 2 + margin }, rotaion, center)
         lowerLeft.style.top = `${lowerLeftPosition.y - rotationSize.height / 2}px`
         lowerLeft.style.left = `${lowerLeftPosition.x - rotationSize.width / 2}px`
         lowerLeft.style.transform = `rotate(${rotaion}deg)`
 
-        const lowerRightPosition = linearTransformation({ x: rect.right + rotationSize.width / 2, y: rect.bottom + rotationSize.height / 2 }, rotaion, center)
+        const lowerRightPosition = linearTransformation({ x: rect.right + rotationSize.width / 2 + margin, y: rect.bottom + rotationSize.height / 2 + margin }, rotaion, center)
         lowerRight.style.top = `${lowerRightPosition.y - rotationSize.height / 2}px`
         lowerRight.style.left = `${lowerRightPosition.x - rotationSize.width / 2}px`
         lowerRight.style.transform = `rotate(${rotaion}deg)`
     }
 
-    document.onclick = (e) => {
+    const changeDisplay = (e) => {
         if (e.target.closest('.item')) {
-            partss.forEach(part => part.classList.remove('none'))
+            parts.forEach(part => part.classList.remove('none'))
         } else {
-            partss.forEach(part => part.classList.add('none'))
+            parts.forEach(part => part.classList.add('none'))
         }
     }
+
+    document.addEventListener('click', changeDisplay)
 })()
