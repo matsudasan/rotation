@@ -19,12 +19,14 @@
         clickedItem = e.target
         nowDegree = e.target.style.transform ? parseFloat(e.target.style.transform.match(/-?[0-9]+\.?[0-9]*/g)[0]) : 0
         firstPosition = e.target.getBoundingClientRect()
-        const size = e.target.getBoundingClientRect()
+        const size = getItemRect(e.target)
         itemCenter = {
             x: size.left + size.width / 2,
             y: size.top + size.height / 2
         }
         setPartsStyle(getItemRect(e.target), nowDegree)
+        console.log(itemCenter)
+
     }
     items.forEach(item => item.addEventListener('click', clickItem))
 

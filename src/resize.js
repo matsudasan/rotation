@@ -9,25 +9,59 @@
         width: parseFloat(window.getComputedStyle(upperLeft).getPropertyValue("width")),
         height: parseFloat(window.getComputedStyle(upperLeft).getPropertyValue("height")),
     }
+    let clickedPosition
+    let clickedPartName
+    let clickItem
+    let originalIitemRect
+    let nowDegree
 
-    const clickItem = (e) => {
-        clickedItem = e.target
+    const clickResizePart = (e) => {
         nowDegree = e.target.style.transform ? parseFloat(e.target.style.transform.match(/-?[0-9]+\.?[0-9]*/g)[0]) : 0
-        firstPosition = e.target.getBoundingClientRect()
-        const size = e.target.getBoundingClientRect()
-        itemCenter = {
-            x: size.left + size.width / 2,
-            y: size.top + size.height / 2
-        }
-        setPartsStyle(getItemRect(e.target), nowDegree)
+        originalIitemRect = getItemRect(e.target)
+        clickItem = e.target
+        setPartsStyle(originalIitemRect, nowDegree)
     }
-    items.forEach(item => item.addEventListener('click', clickItem))
+    items.forEach(item => item.addEventListener('click', clickResizePart))
+
+    const resize = (e) => {
+        if (clickedPartName === "resize-upperLeft") {
+            const width = originalIitemRect.width - (e.pageX - clickedPosition.x)
+            const height = originalIitemRect.height - (e.pageY - clickedPosition.y)
+            const left = originalIitemRect.left + (e.pageX - clickedPosition.x)
+            const top = originalIitemRect.top + (e.pageY - clickedPosition.y)
+
+            clickItem.style.width = width + 'px'
+            clickItem.style.left = left + 'px'
+            clickItem.style.height = height + 'px'
+            clickItem.style.top = top + 'px'
+
+            setPartsStyle({ width, left, height, top }, nowDegree)
+        }
+    }
+
+    const stopResize = () => document.removeEventListener('mousemove', resize)
+
+    parts.forEach(part => {
+        part.addEventListener('mousedown', (e) => {
+            clickedPartName = e.target.id
+            clickedPosition = {
+                x: e.pageX,
+                y: e.pageY
+            }
+            document.addEventListener('mousemove', resize)
+            document.addEventListener('mouseup', stopResize)
+        })
+        part.addEventListener('mouseup', () => {
+            document.removeEventListener('mousemove', resize)
+        })
+    })
 
     const setPartsStyle = (rect, rotaion) => {
         const center = {
             x: rect.left + rect.width / 2,
             y: rect.top + rect.height / 2
         }
+
         const upperLeftPosition = linearTransformation({ x: rect.left, y: rect.top }, rotaion, center)
         upperLeft.style.top = `${upperLeftPosition.y - resizeSize.height / 2}px`
         upperLeft.style.left = `${upperLeftPosition.x - resizeSize.width / 2}px`
